@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<flow name="implementationFlow" doc:id="194a4c87-f055-4ed9-ab81-7e81eead21b6" >
+		<http:listener doc:name="Listener" doc:id="4beb9255-d25a-4795-b710-21007adbadb3" config-ref="HTTP_Listener_config" path="/final"/>
+		<logger level="INFO" doc:name="Logger" doc:id="c0e4f20f-87c8-4db8-957e-8b2d5a6d1214" />
+		<db:bulk-insert doc:name="Bulk insert" doc:id="566b51b0-af9f-4407-8468-61bbda38edd4" config-ref="Database_Config">
+			<db:sql ><![CDATA[insert into million (Region, Country, ItemType, SalesChannel, OrderPriority, OrderDate, OrderId, ShipDate, UnitsSold, UnitPrice, UnitCost, TotalRevenue, TotalCost, TotalProfit)
+values(:Region, :Country, :ItemType, :SalesChannel, :OrderPriority, :OrderDate, :OrderId, :ShipDate, :UnitsSold, :UnitPrice, :UnitCost, :TotalRevenue, :TotalCost, :TotalProfit)]]></db:sql>
+		</db:bulk-insert>
+		<logger level="INFO" doc:name="Logger" doc:id="f9038822-ba62-446e-8d48-eeb1c778f07e" />
+	</flow>
+</mule>
