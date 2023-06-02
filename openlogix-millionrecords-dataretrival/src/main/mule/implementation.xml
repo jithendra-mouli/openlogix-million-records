@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:compression="http://www.mulesoft.org/schema/mule/compression"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/compression http://www.mulesoft.org/schema/mule/compression/current/mule-compression.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="DataRetriveFlow" doc:id="3fbbb0b4-d0c2-4b6e-9035-ce87101ca7d4" >
+		<logger level="INFO" doc:name="First Logger" doc:id="1420ed2e-1ade-482e-b956-b19a7412afca" message="First Logger"/>
+		<http:request method="GET" doc:name="Request" doc:id="237ab67e-daf4-41e0-a6ae-e13f7bb4f946" config-ref="HTTP_Request_configuration" path="/wp/wp-content/uploads/2017/07/100000-Sales-Records.zip"/>
+		<logger level="INFO" doc:name="Logger" doc:id="64dfcaa0-3303-4060-a37a-2794e0032d36" />
+		<compression:extract doc:name="Extract" doc:id="d1dde67b-3da2-4dff-884a-f1248da16cd0" >
+			<compression:extractor >
+				<compression:zip-extractor />
+			</compression:extractor>
+		</compression:extract>
+		<logger level="INFO" doc:name="Logger" doc:id="020a9dd2-e74b-4c5e-8dfd-9de780349218" />
+		<ee:transform doc:name="Transform Message" doc:id="eac2310e-e71b-4d39-bb35-68c7ae4e3722" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/csv header=false
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="ce2510dc-a23a-4801-8fb5-f69eb75378f0" />
+		<file:read doc:name="Read" doc:id="5ee05b92-c41c-4871-8dc2-b57d0db4759c" config-ref="File_Config" path="E:\Data of D\csv\100000 Sales Records.csv" />
+		<logger level="INFO" doc:name="Logger" doc:id="a659ebe4-adfd-4cfd-b565-4caa37f969bc" />
+<!-- [STUDIO:"Write"]		<file:write doc:name="Write" doc:id="12d92395-667b-4fa9-ab98-0d61c1e702e5" config-ref="File_Config" path="D:\Data of D\csv\100000 Sales Records.csv" /> [STUDIO] -->
+<!-- [STUDIO:"Transform Message"]		<ee:transform doc:name="Transform Message" doc:id="f3251dca-a8df-4e09-a724-d21e52ccc877" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+&#45;&#45;-
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform> [STUDIO] -->
+	</flow>
+</mule>
